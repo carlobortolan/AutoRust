@@ -1,12 +1,4 @@
-use std::{
-    cell::{Ref, RefCell},
-    collections::HashSet,
-    fmt::Debug,
-    hash::Hash,
-    iter::Sum,
-    ops::{Add, Deref, Mul, Neg, Sub},
-    rc::Rc,
-};
+use std::{cell::{Ref, RefCell}, collections::HashSet, fmt, fmt::Debug, hash::Hash, iter::Sum, ops::{Add, Deref, Mul, Neg, Sub}, rc::Rc};
 
 #[derive(Clone, Eq, PartialEq, Debug)]
 pub struct Value(Rc<RefCell<ValueInternal>>);
@@ -320,5 +312,13 @@ impl Debug for ValueInternal {
             .field("operation", &self.operation)
             .field("previous", &self.previous)
             .finish()
+    }
+}
+
+impl fmt::Display for Value {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "{:.4}", self.data())?;
+        write!(f, " | grad {:.4}", self.grad())?;
+        Ok(())
     }
 }

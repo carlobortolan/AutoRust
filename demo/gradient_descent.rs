@@ -1,4 +1,6 @@
-use autorust::{MLP, Value};
+//! This is a basic example of performing grad descent with a neural network using micrograd-rs.
+
+use micrograd_rs::{MLP, Value};
 
 fn main() {
     let mlp = MLP::new(3, vec![4, 4, 1]);
