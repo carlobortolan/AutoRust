@@ -1,14 +1,11 @@
-pub fn add(left: usize, right: usize) -> usize {
-    left + right
-}
+pub use crate::layer::Layer;
+pub use crate::mlp::MLP;
+pub use crate::neuron::Neuron;
+pub use crate::engine::Value;
 
-#[cfg(test)]
-mod tests {
-    use super::*;
+mod engine;
+mod neuron;
+mod layer;
+mod mlp;
+mod test;
 
-    #[test]
-    fn it_works() {
-        let result = add(2, 2);
-        assert_eq!(result, 4);
-    }
-}
