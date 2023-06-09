@@ -32,17 +32,17 @@ impl Value {
         self.borrow().data
     }
 
-    pub fn gradient(&self) -> f64 {
-        self.borrow().gradient
+    pub fn grad(&self) -> f64 {
+        self.borrow().grad
     }
 
-    pub fn clear_gradient(&self) {
-        self.borrow_mut().gradient = 0.0;
+    pub fn clear_grad(&self) {
+        self.borrow_mut().grad = 0.0;
     }
 
     pub fn adjust(&self, factor: f64) {
         let mut value = self.borrow_mut();
-        value.data += factor * value.gradient;
+        value.data += factor * value.grad;
     }
 
     pub fn pow(&self, other: &Value) -> Value {
@@ -51,7 +51,7 @@ impl Value {
         let prop_fn: PropagateFn = |value| {
             let mut base = value.previous[0].borrow_mut();
             let power = value.previous[1].borrow();
-            base.gradient += power.data * (base.data.powf(power.data - 1.0)) * value.gradient;
+            base.grad += power.data * (base.data.powf(power.data - 1.0)) * value.grad;
         };
 
         Value::new(ValueInternal::new(
@@ -68,7 +68,7 @@ impl Value {
 
         let prop_fn: PropagateFn = |value| {
             let mut previous = value.previous[0].borrow_mut();
-            previous.gradient += (1.0 - value.data.powf(2.0)) * value.gradient;
+            previous.grad += (1.0 - value.data.powf(2.0)) * value.grad;
         };
 
         Value::new(ValueInternal::new(
@@ -80,10 +80,27 @@ impl Value {
         ))
     }
 
+    pub fn relu(&self) -> Value {
+        let result = if self.borrow().data < 0.0 { 0.0 } else { self.borrow().data };
+
+        let prop_fn: PropagateFn = |value| {
+            let mut previous = value.previous[0].borrow_mut();
+            previous.grad += (value.data > 0.0) as i32 as f64 * value.grad;
+        };
+
+        Value::new(ValueInternal::new(
+            result,
+            None,
+            Some("relu".to_string()),
+            vec![self.clone()],
+            Some(prop_fn),
+        ))
+    }
+
     pub fn backward(&self) {
         let mut visited: HashSet<Value> = HashSet::new();
 
-        self.borrow_mut().gradient = 1.0;
+        self.borrow_mut().grad = 1.0;
         self.backward_internal(&mut visited, self);
     }
 
@@ -146,8 +163,8 @@ fn add(a: &Value, b: &Value) -> Value {
         let mut first = value.previous[0].borrow_mut();
         let mut second = value.previous[1].borrow_mut();
 
-        first.gradient += value.gradient;
-        second.gradient += value.gradient;
+        first.grad += value.grad;
+        second.grad += value.grad;
     };
 
     Value::new(ValueInternal::new(
@@ -198,8 +215,8 @@ fn mul(a: &Value, b: &Value) -> Value {
         let mut first = value.previous[0].borrow_mut();
         let mut second = value.previous[1].borrow_mut();
 
-        first.gradient += second.data * value.gradient;
-        second.gradient += first.data * value.gradient;
+        first.grad += second.data * value.grad;
+        second.grad += first.data * value.grad;
     };
 
     Value::new(ValueInternal::new(
@@ -246,7 +263,7 @@ type PropagateFn = fn(value: &Ref<ValueInternal>);
 
 pub struct ValueInternal {
     data: f64,
-    gradient: f64,
+    grad: f64,
     label: Option<String>,
     operation: Option<String>,
     previous: Vec<Value>,
@@ -263,7 +280,7 @@ impl ValueInternal {
     ) -> ValueInternal {
         ValueInternal {
             data,
-            gradient: 0.0,
+            grad: 0.0,
             label,
             operation: op,
             previous: prev,
@@ -275,7 +292,7 @@ impl ValueInternal {
 impl PartialEq for ValueInternal {
     fn eq(&self, other: &Self) -> bool {
         self.data == other.data
-            && self.gradient == other.gradient
+            && self.grad == other.grad
             && self.label == other.label
             && self.operation == other.operation
             && self.previous == other.previous
@@ -287,7 +304,7 @@ impl Eq for ValueInternal {}
 impl Hash for ValueInternal {
     fn hash<H: std::hash::Hasher>(&self, state: &mut H) {
         self.data.to_bits().hash(state);
-        self.gradient.to_bits().hash(state);
+        self.grad.to_bits().hash(state);
         self.label.hash(state);
         self.operation.hash(state);
         self.previous.hash(state);
@@ -298,7 +315,7 @@ impl Debug for ValueInternal {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         f.debug_struct("ValueInternal")
             .field("data", &self.data)
-            .field("gradient", &self.gradient)
+            .field("grad", &self.grad)
             .field("label", &self.label)
             .field("operation", &self.operation)
             .field("previous", &self.previous)
