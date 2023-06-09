@@ -24,10 +24,11 @@ cargo install autorust
 
 ## Training a neural net
 
+// TODO
+
 The file `demo/demo.rs` provides a full demo of training a 2-layer neural network (MLP) binary classifier. This is
 achieved by initializing a neural net from `autorust::mlp` module, implementing a simple svm "max-margin" binary
-classification loss and using SGD for optimization. As shown in the notebook, using a 2-layer neural net with two
-16-node hidden layers we achieve the following decision boundary on the moon dataset:
+classification loss and using SGD for optimization. 
 
 | <a href="demo/demo.rs"><img src="moon_in.png" width="400px;" alt=""/> | <a href="demo/demo.rs"><img src="moon_mlp.png" width="500px;" alt=""/> |
 |-----------------------------------------------------------------------|------------------------------------------------------------------------|
