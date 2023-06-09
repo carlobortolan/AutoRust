@@ -1,6 +1,6 @@
 # AutoRust
 
-[![Crate](https://img.shields.io/crates/v/autorust.svg)](https://crates.io/crates/autorust)
+<!--[![Crate](https://img.shields.io/crates/v/autorust.svg)](https://crates.io/crates/autorust)-->
 [![Rust CI](https://github.com/carlobortolan/autorust/actions/workflows/rust_ci.yml/badge.svg?branch=master)](https://github.com/carlobortolan/autorust/actions/workflows/rust_ci.yml)
 [![Rust CD](https://github.com/carlobortolan/autorust/actions/workflows/rust_cd.yml/badge.svg)](https://github.com/carlobortolan/autorust/actions/workflows/rust_cd.yml)
 
@@ -34,17 +34,8 @@ classification loss and using SGD for optimization. As shown in the notebook, us
 
 ## Tracing / visualization
 
-For added convenience, the script `trace_graph.rs` produces graphviz visualizations. E.g. this one below is of a simple
-2D neuron, arrived at by calling `draw_dot` on the code below, and it shows both the data (left number in each node) and
-the grad (right number in each node).
-
-```rust
-n = nn.Neuron(2)
-x = [Value(1.0), Value( - 2.0)]
-y = n(x)
-dot = draw_dot(y)
-```
-
+// TODO
+  
 ![2d neuron](gout.svg)
 
 ## Running tests
