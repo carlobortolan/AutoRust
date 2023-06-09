@@ -57,7 +57,7 @@ classification loss and using SGD for optimization. As shown in the notebook, us
 
 For added convenience, the script `trace_graph.py` produces graphviz visualizations. E.g. this one below is of a simple
 2D neuron, arrived at by calling `draw_dot` on the code below, and it shows both the data (left number in each node) and
-the gradient (right number in each node).
+the grad (right number in each node).
 
 ```rust
 from dagnet import nn
@@ -72,7 +72,7 @@ dot = draw_dot(y)
 ## Running tests
 
 To run the unit tests you will have to install [PyTorch](https://pytorch.org/), which the tests use as a reference for
-verifying the correctness of the calculated gradients. Then simply run:
+verifying the correctness of the calculated grads. Then simply run:
 
 ```bash
 python -m pytest
