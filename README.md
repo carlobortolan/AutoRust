@@ -56,9 +56,7 @@ engines and neural nets._
 
 This project is licensed under the MIT license. See the [LICENSE](LICENSE) file for details.
 
-
 ---
-
 
 © Carlo Bortolan
 
