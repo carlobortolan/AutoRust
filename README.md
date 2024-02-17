@@ -8,8 +8,8 @@ A simple Autograd engine written in Rust that implements backpropagation (revers
 built DAG and a small neural networks library with a PyTorch-like API. The DAG only operates over scalar values.
 However, this is enough to build up entire deep neural nets doing binary classification, as the demo notebook shows.
 
-
-> __NOTE__: __THIS PROJECT IS STILL UNDER DEVELOPMENT.__
+> [!IMPORTANT]
+> As of February 18, 2024, this project has been put on hold and will probably not be worked on or finished in the near future.
 
 <!-- ## Installation
 
@@ -20,7 +20,8 @@ cargo install autorust
 
 ## Example usage
 
-> __NOTE__: _Check out [/demo](./demo) for more detailed examples_
+> [!NOTE]
+Check out [/demo](./demo) for more detailed examples.
 
 ## Training a neural net
 
